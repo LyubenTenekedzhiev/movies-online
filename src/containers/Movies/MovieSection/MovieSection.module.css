@@ -1,0 +1,9 @@
+.Movies {
+  display: flex;
+}
+
+.Movie {
+  width: 12vw;
+  height: 30vh;
+  margin-left: .7rem;
+}

@@ -1,10 +1,9 @@
 import React from 'react';
 import axios from 'axios';
-import { NavLink } from 'react-router-dom';
+import { NavLink, withRouter } from 'react-router-dom';
 
 // adding CSS
 import classes from './MovieSection.module.css';
-
 import Movie from './Movie/Movie';
 
 class MovieSection extends React.Component {
@@ -14,10 +13,10 @@ class MovieSection extends React.Component {
   }
 
   componentDidMount() {
-    this.loadData()
+    this.fetchMoviesHandler();
   }
 
-  loadData = () => {
+  fetchMoviesHandler = () => {
     if (this.props.url) {
       this.setState({ 
           loading: true,
@@ -41,9 +40,27 @@ class MovieSection extends React.Component {
             }))
   }
 
+  showDetailHandler = ( id ) => {
+    const queryParams = [];
+    const findMovie = [...this.state.movies];
+    let movieItem = '';
+    findMovie.map(movie => {
+      if(movie.id === id) {
+        movieItem = movie;
+      }
+    })
+    queryParams.push(encodeURIComponent('overview') + '=' + encodeURIComponent(movieItem.overview));
+    queryParams.push(encodeURIComponent('poster') + '=' + encodeURIComponent(movieItem.poster_path));
+    queryParams.push(encodeURIComponent('voteAvg') + '=' + encodeURIComponent(movieItem.vote_average));
+    const queryString = queryParams.join('&');
+    this.props.history.push({
+        	pathname: '/movieDetails',
+        	search: '?' + queryString
+      })
+  }
+
 
   render() {
-    // console.log(this.state.movies);
     let content = (
       <div>Loading...</div> 
     )
@@ -52,10 +69,10 @@ class MovieSection extends React.Component {
       content = (
         <>
           {this.state.movies.map(movie => (
-            <NavLink to={'/movie/' + movie.id} key={movie.id}>
-                  <Movie { ...movie } />
-                  {this.props.children}
-            </NavLink>
+                  <Movie 
+                        key={movie.id} 
+                        clicked={() => this.showDetailHandler(movie.id)} 
+                        { ...movie } />
           ))}
         </>
       )
@@ -64,9 +81,22 @@ class MovieSection extends React.Component {
     return (
         <div className={classes.Movies}>
           { content }
-        </div>
+         </div>
     )
   }
 }
 
-export default MovieSection;
+// const mapStateToProps = state => {
+//   return {
+//     loading: state.movieReducer.loading,
+
+//   }
+// }
+
+// const mapDispatchToProps = dispatch => {
+//   return {
+//     onFetchMovies: () => dispatch(actions.fetchMovies()),
+//   }
+// }
+
+export default withRouter(MovieSection);

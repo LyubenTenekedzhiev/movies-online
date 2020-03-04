@@ -1,36 +1,60 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import axios from 'axios';
+import { NavLink } from 'react-router-dom';
 
 // adding CSS
 import classes from './MovieSection.module.css';
-import { NavLink } from 'react-router-dom';
 
-import * as action from '../../../store/actions/index';
-
-// import Movie from './Movie/Movie';
-
+import Movie from './Movie/Movie';
 
 class MovieSection extends React.Component {
+  state = {
+    movies: [],
+    loading: false,
+  }
 
-  componentWillMount() {
-    this.props.onFetchMovies(this.props.url)
+  componentDidMount() {
+    this.loadData()
+  }
+
+  loadData = () => {
+    if (this.props.url) {
+      this.setState({ 
+          loading: true,
+          movies: []
+      })
+    }
+    axios.get(this.props.url)
+          .then(response => {
+            // console.log(response.data.results)
+            const updatedMovies = [...this.state.movies];
+            updatedMovies.concat(response.data.results);
+            this.setState({
+              movies: this.state.movies.concat(response.data.results),
+              loading: false
+            })
+          }).catch(error => {
+            console.log(error)
+          }).finally( 
+            this.setState({
+              loading: false
+            }))
   }
 
 
   render() {
-    console.log(this.props.movies)
+    // console.log(this.state.movies);
     let content = (
       <div>Loading...</div> 
     )
 
-    if(!this.props.loading) {
+    if(!this.state.loading) {
       content = (
         <>
-          {this.props.movies.map(movie => (
+          {this.state.movies.map(movie => (
             <NavLink to={'/movie/' + movie.id} key={movie.id}>
-                  {/* <Movie clicked={() => this.showMovieHandler(movie.id)} { ...movie } />
-                  {this.props.children} */}
-                  <img className={classes.Movie} src={"http://image.tmdb.org/t/p/w342/" + movie.poster_path}/>
+                  <Movie { ...movie } />
+                  {this.props.children}
             </NavLink>
           ))}
         </>
@@ -45,19 +69,4 @@ class MovieSection extends React.Component {
   }
 }
 
-
-const mapStateToProps = state => {
-  return {
-    movies: state.movieReducer.movies,
-    loading: state.movieReducer.loading
-  }
-}
-
-const mapDispatchToProps = dispatch => {
-  return {
-    onFetchMovies: (url) => dispatch(action.fetchMovies(url)),
-  }
-}
-
-
-export default connect(mapStateToProps, mapDispatchToProps)(MovieSection);
+export default MovieSection;

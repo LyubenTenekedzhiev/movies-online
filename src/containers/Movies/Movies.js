@@ -4,38 +4,34 @@ import { connect } from 'react-redux';
 import classes from './Movies.module.css';
 import MovieSection from './MovieSection/MovieSection';
 
-// import * as action from '../../../store/actions/index';
-// import * as action from '../../store/actions/index';
-
 class Movies extends React.Component {
-  // componentWillMount() {
-  //   this.props.onFetchMovies(this.props.documentaries)
-  //   // console.log(this.props.movies)
-  // }
 
   render() {
-    // console.log(this.props);
     return (
       <div>
-          <MovieSection url={this.props.url} />
+          <h1 className={classes.Title}>Popular movies</h1>
+            <MovieSection url={this.props.popularMovies} />
+            
+          <h1 className={classes.Title}>Popular series</h1>
+            <MovieSection url={this.props.popularSeries} />
+
+          <h1 className={classes.Title}>For the whole family</h1>
+            <MovieSection url={this.props.familyMovies} />
+
+          <h1 className={classes.Title}>Documentaries</h1>
+            <MovieSection url={this.props.documentaries} />
       </div>
     )
   }
 }
 
-// const mapStateToProps = state => {
-//   return {
-//     popularMovies: state.movieReducer.popularMovies,
-//     popularSeries: state.movieReducer.popularSeries,
-//     familyMovies: state.movieReducer.familyMovies,
-//     documentaries: state.movieReducer.documentaries,
-//   }
-// }
+const mapStateToProps = state => {
+  return {
+    popularMovies: state.movieReducer.popularMovies,
+    popularSeries: state.movieReducer.popularSeries,
+    familyMovies: state.movieReducer.familyMovies,
+    documentaries: state.movieReducer.documentaries,
+  }
+}
 
-// const mapDispatchToProps = dispatch => {
-//   return {
-//     onFetchMovies: (url) => dispatch(action.fetchMovies(url)),
-//   }
-// }
-
-export default Movies;
+export default connect(mapStateToProps)(Movies);

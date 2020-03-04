@@ -1,0 +1,51 @@
+.MovieDetails {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.MovieDescription {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  height: 100vh;
+  font-size: 1rem;
+  font-family: "Nunito";
+  width: 50vw;
+}
+
+.MovieSummary {
+  font-weight: 300;
+  font-size: 1.7rem;
+}
+
+.MovieMetaData {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.MovieImage {
+  height: 70vh;
+  margin-top: 6rem;
+  box-shadow: 0 0 1rem rgba(255,255,255.6);
+  border-radius: 8px;
+  transition: .4s all;
+}
+
+.MovieImage:hover {
+  transform: scale(1.05);
+}
+
+.MovieButton {
+  text-decoration: none;
+  color: white;
+  border: 1.3px solid white;
+  padding: 1rem;
+  border-radius: 7px;
+  font-size: 1.3rem;
+  transition: .4s all;
+}
+
+.MovieButton:hover {
+  transform: scale(1.1);
+}

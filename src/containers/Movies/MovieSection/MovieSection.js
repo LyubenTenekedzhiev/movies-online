@@ -2,13 +2,14 @@ import React from 'react';
 import axios from 'axios';
 import { NavLink, withRouter } from 'react-router-dom';
 
-// adding CSS
 import classes from './MovieSection.module.css';
 import Movie from './Movie/Movie';
 
 class MovieSection extends React.Component {
   state = {
     movies: [],
+    currentPage: 1,
+    moviesPerPage: 7,
     loading: false,
   }
 
@@ -16,6 +17,7 @@ class MovieSection extends React.Component {
     this.fetchMoviesHandler();
   }
 
+  // Fetching movies
   fetchMoviesHandler = () => {
     if (this.props.url) {
       this.setState({ 
@@ -25,7 +27,7 @@ class MovieSection extends React.Component {
     }
     axios.get(this.props.url)
           .then(response => {
-            // console.log(response.data.results)
+            console.log(response.data)
             const updatedMovies = [...this.state.movies];
             updatedMovies.concat(response.data.results);
             this.setState({
@@ -40,6 +42,10 @@ class MovieSection extends React.Component {
             }))
   }
 
+  // Pagination
+
+
+  // Building queries to show detailed info about a movie
   showDetailHandler = ( id ) => {
     const queryParams = [];
     const findMovie = [...this.state.movies];
@@ -49,9 +55,15 @@ class MovieSection extends React.Component {
         movieItem = movie;
       }
     })
+    console.log(movieItem);
     queryParams.push(encodeURIComponent('overview') + '=' + encodeURIComponent(movieItem.overview));
     queryParams.push(encodeURIComponent('poster') + '=' + encodeURIComponent(movieItem.poster_path));
     queryParams.push(encodeURIComponent('voteAvg') + '=' + encodeURIComponent(movieItem.vote_average));
+    // Checking if it's title or name AND realease_date or first_air_date
+    if(movieItem.title)          queryParams.push(encodeURIComponent('title') + '=' + encodeURIComponent(movieItem.title));
+    if(movieItem.name)           queryParams.push(encodeURIComponent('name') + '=' + encodeURIComponent(movieItem.name));
+    if(movieItem.release_date)   queryParams.push(encodeURIComponent('release_date') + '=' + encodeURIComponent(movieItem.release_date));
+    if(movieItem.first_air_date) queryParams.push(encodeURIComponent('first_air_date') + '=' + encodeURIComponent(movieItem.first_air_date));
     const queryString = queryParams.join('&');
     this.props.history.push({
         	pathname: '/movieDetails',

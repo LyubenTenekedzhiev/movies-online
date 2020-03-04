@@ -2,5 +2,24 @@
   width: 12vw;
   height: 30vh;
   margin-left: .7rem;
+  transition: .4s all;
+  border-radius: 3px;
+}
+
+.Movie:hover {
+  transform: scale(1.03);
+  cursor: pointer;
+}
+
+.MovieTitle {
+  /* display: none; */
+  background-color: rgba(245, 245, 220, 0.274);
+  text-align: center;
+  margin-left: .7rem;
+  width: 12vw;
+  font-family: "Nunito";
+  border-radius: 3px;
+  font-size: .8rem;
+  padding: .2rem;
 }
 

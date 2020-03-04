@@ -5,8 +5,8 @@
 }
 
 .App {
-  /* text-align: center; */
   background-color: rgb(37, 24, 26);
   color: white;
-  overflow: hidden;
+  padding-bottom: 7rem;
+  /* overflow: hidden; */
 }

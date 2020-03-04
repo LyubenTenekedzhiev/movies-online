@@ -15,7 +15,7 @@ class Movies extends React.Component {
           <h1 className={classes.Title}>Popular series</h1>
             <MovieSection url={this.props.popularSeries} />
 
-          <h1 className={classes.Title}>For the whole family</h1>
+          <h1 className={classes.Title}>Family movies</h1>
             <MovieSection url={this.props.familyMovies} />
 
           <h1 className={classes.Title}>Documentaries</h1>

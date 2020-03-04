@@ -12,6 +12,8 @@ const movie = ( props ) => {
                 alt={props.original_title} 
                 onClick={props.clicked} />
         : null }
+        
+        { props.title ? (<h3 className={classes.MovieTitle}>{props.title}</h3>) : (<h3  className={classes.MovieTitle}>{props.name}</h3>) }
       </div>
     )
   }

@@ -8,8 +8,9 @@ import Movie from './Movie/Movie';
 class MovieSection extends React.Component {
   state = {
     movies: [],
-    currentPage: 1,
-    moviesPerPage: 7,
+    firstMovie: 0,
+    lastMovie: 0,
+    pageNumber: 1,
     loading: false,
   }
 
@@ -25,15 +26,15 @@ class MovieSection extends React.Component {
           movies: []
       })
     }
-    axios.get(this.props.url)
+    axios.get(this.props.url + '&page=' + this.state.pageNumber)
           .then(response => {
-            console.log(response.data)
             const updatedMovies = [...this.state.movies];
             updatedMovies.concat(response.data.results);
             this.setState({
               movies: this.state.movies.concat(response.data.results),
               loading: false
             })
+            console.log(response.data)
           }).catch(error => {
             console.log(error)
           }).finally( 
@@ -43,7 +44,38 @@ class MovieSection extends React.Component {
   }
 
   // Pagination
-
+  nextPageHandler = () => {
+    if(this.state.movies.length - this.state.firstMovie >= 13) {
+      this.setState({
+        firstMovie: this.state.firstMovie += 7,
+      }) 
+    } else {
+      this.setState({
+        pageNumber: this.state.pageNumber += 1,
+        firstMovie: this.state.firstMovie = 0,
+      })
+      this.fetchMoviesHandler();
+    }
+  } 
+  prevPageHandler = () => {
+    if(this.state.movies.length - this.state.firstMovie <= 13) {
+      this.setState({
+        firstMovie: this.state.firstMovie -= 7,
+      }) 
+    } else {
+      if(this.state.pageNumber <= 1) {
+        this.setState({
+          pageNumber: this.state.pageNumber = 1
+        })
+      } else {
+        this.setState({
+          pageNumber: this.state.pageNumber -= 1,
+          firstMovie: this.state.firstMovie = 0,
+        })
+        this.fetchMoviesHandler();
+      }
+    }
+  } 
 
   // Building queries to show detailed info about a movie
   showDetailHandler = ( id ) => {
@@ -74,16 +106,17 @@ class MovieSection extends React.Component {
 
   render() {
     let content = (
-      <div>Loading...</div> 
+      <h1>Loading...</h1>
     )
 
     if(!this.state.loading) {
       content = (
         <>
-          {this.state.movies.map(movie => (
+          {this.state.movies.slice(this.state.firstMovie).map(movie => (
                   <Movie 
                         key={movie.id} 
-                        clicked={() => this.showDetailHandler(movie.id)} 
+                        clicked={() => this.showDetailHandler(movie.id)}
+                        nextPage={this.nextPageHandler}
                         { ...movie } />
           ))}
         </>
@@ -91,9 +124,15 @@ class MovieSection extends React.Component {
     }
 
     return (
-        <div className={classes.Movies}>
-          { content }
-         </div>
+      <div className={classes.MovieSection}>
+            <div className={classes.Movies}>
+              { content }
+            </div>
+            <div className={classes.MovieButtons}>
+                <button onClick={this.prevPageHandler}>Previous page</button>
+                <button onClick={this.nextPageHandler}>Next page</button>
+            </div>
+      </div>
     )
   }
 }

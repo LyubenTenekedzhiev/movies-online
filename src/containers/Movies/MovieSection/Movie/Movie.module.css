@@ -1,9 +1,10 @@
 .Movie {
   width: 12vw;
-  height: 30vh;
+  height: 40vh;
   margin-left: .7rem;
   transition: .4s all;
   border-radius: 3px;
+  animation: slideIn 1s;
 }
 
 .Movie:hover {
@@ -12,7 +13,6 @@
 }
 
 .MovieTitle {
-  /* display: none; */
   background-color: rgba(245, 245, 220, 0.274);
   text-align: center;
   margin-left: .7rem;
@@ -23,3 +23,11 @@
   padding: .2rem;
 }
 
+@keyframes slideIn {
+  0% {
+    transform: translateX(10%);
+  }
+  100% {
+    transform: translateX(-1%);
+  }
+}

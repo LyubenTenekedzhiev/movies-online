@@ -11,7 +11,7 @@ class Movies extends React.Component {
       <div>
           <h1 className={classes.Title}>Popular movies</h1>
             <MovieSection url={this.props.popularMovies} />
-            
+
           <h1 className={classes.Title}>Popular series</h1>
             <MovieSection url={this.props.popularSeries} />
 

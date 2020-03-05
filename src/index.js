@@ -8,6 +8,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { combineReducers, createStore, applyMiddleware, compose, } from 'redux';
 import thunk from 'redux-thunk';
+import cors from 'cors';
 
 import movieReducer from './store/reducers/movie';
 

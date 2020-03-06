@@ -1,7 +1,6 @@
 .MovieDetails {
   display: flex;
   justify-content: space-evenly;
-  height: 90vh;
   width: 90vw;
   margin: auto;
   margin-top: 2.5rem;
@@ -12,7 +11,6 @@
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
-  height: 100vh;
   font-size: 1rem;
   font-family: "Nunito";
   width: 50vw;
@@ -26,12 +24,13 @@
 .MovieMetaData {
   display: flex;
   align-items: center;
-  justify-content: space-evenly;
+  justify-content: space-between;
 }
 
 .MovieImage {
   height: 70vh;
-  margin-top: 6rem;
+  margin-top: 3rem;
+  margin-bottom: 3rem;
   box-shadow: 0 0 1rem rgba(255,255,255.6);
   border-radius: 8px;
   transition: .4s all;
@@ -41,16 +40,25 @@
   transform: scale(1.05);
 }
 
-.MovieButton {
-  text-decoration: none;
-  color: white;
-  border: 1.3px solid white;
-  padding: 1rem;
-  border-radius: 7px;
-  font-size: 1.3rem;
-  transition: .4s all;
+.MovieVideo {
+  position: absolute;
+  top: 14%;
+  left: 5.5%;
+  display: block;
+  /* transform: translate(-50%, -50%); */
+  z-index: 3;
+  animation: slideIn 1s;
 }
 
-.MovieButton:hover {
-  transform: scale(1.1);
+.MovieVideoHide {
+  display: none;
+}
+
+@keyframes slideIn {
+  0% {
+    transform: translateY(-50%);
+  }
+  100% {
+    transform: translate(0%);
+  }
 }

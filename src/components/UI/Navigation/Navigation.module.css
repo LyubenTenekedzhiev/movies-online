@@ -1,0 +1,23 @@
+.Navigation {
+  display: flex;
+  justify-content: space-around;
+  background-color: rgba(245, 245, 220, 0.274);
+}
+
+.NavigationHome {
+  align-self: center;
+}
+
+.NavigationItem {
+  text-align: center;
+  font-family: "Nunito";
+  font-size: 1.2rem;
+  margin: 1rem;
+  text-decoration: none;
+  color: white;
+  transition: .5s all;
+}
+
+.NavigationItem:hover {
+  border-bottom: 1.5px solid white;
+}

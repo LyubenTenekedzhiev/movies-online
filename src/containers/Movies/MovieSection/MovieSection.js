@@ -4,12 +4,12 @@ import { NavLink, withRouter } from 'react-router-dom';
 
 import classes from './MovieSection.module.css';
 import Movie from './Movie/Movie';
+import Button from '../../../components/UI/Button/Button';
 
 class MovieSection extends React.Component {
   state = {
     movies: [],
     firstMovie: 0,
-    lastMovie: 0,
     pageNumber: 1,
     loading: false,
   }
@@ -34,7 +34,7 @@ class MovieSection extends React.Component {
               movies: this.state.movies.concat(response.data.results),
               loading: false
             })
-            console.log(response.data)
+            // console.log(response.data)
           }).catch(error => {
             console.log(error)
           }).finally( 
@@ -129,8 +129,8 @@ class MovieSection extends React.Component {
               { content }
             </div>
             <div className={classes.MovieButtons}>
-                <button onClick={this.prevPageHandler}>Previous page</button>
-                <button onClick={this.nextPageHandler}>Next page</button>
+                <Button clicked={this.prevPageHandler}>Previous page</Button>
+                <Button clicked={this.nextPageHandler}>Next page</Button>
             </div>
       </div>
     )

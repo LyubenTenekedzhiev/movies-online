@@ -1,0 +1,16 @@
+.SearchMovies {
+  width: 90%;
+  margin: 0 auto;
+}
+
+.Movies {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.Buttons {
+  display: flex;
+  justify-content: space-around;
+  width: 60%;
+  margin: 0 auto 2.5rem auto;
+}

@@ -1,0 +1,17 @@
+.SearchbarContainer {
+  display: flex;
+  justify-content: center;
+}
+
+.Searchbar {
+  width: 30vw;
+  height: 2.5rem;
+  outline: none;
+  border-radius: 6px;
+  margin: 3rem 0 3rem 0rem;
+  background-color: rgb(37, 24, 26);
+  border: 1.5px solid white;
+  color: white;
+  font-family: "Nunito";
+  font-size: 1.3rem;
+}

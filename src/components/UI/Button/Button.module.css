@@ -1,0 +1,18 @@
+.Button {
+  font-size: 1.3rem;
+  font-family: "Nunito";
+  font-weight: 300;
+  text-decoration: none;
+  color: white;
+  border: 1px solid white;
+  padding: 1rem;
+  border-radius: 7px;
+  transition: .4s all;
+  cursor: pointer;
+  background-color: rgb(37, 24, 26);
+  outline: none;
+}
+
+.Button:hover {
+  transform: scale(1.1);
+}

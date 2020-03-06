@@ -9,31 +9,7 @@
   display: flex;
 }
 
-.Movie {
-  width: 12vw;
-  height: 30vh;
-  margin-left: .7rem;
-}
-
 .MovieButtons {
   display: flex;
   justify-content: space-evenly;
-}
-
-button {
-  font-family: "Nunito";
-  color: white;
-  font-size: 1rem;
-  outline: none;
-  width: 8rem;
-  height: 2.5rem;
-  background-color: rgba(245, 245, 220, 0.274);
-  border-radius: 7px;
-  border: none;
-  cursor: pointer;
-  transition: .4s all;
-}
-
-button:hover {
-  transform: scale(1.05);
 }

@@ -3,6 +3,10 @@ import shaka from 'shaka-player';
 import HLS from 'hls.js';
 
 import classes from './MovieDetails.module.css';
+import style from '../../../../components/UI/Button/Button.module.css'
+import {NavLink} from 'react-router-dom';
+import Backdrop from '../../../../components/UI/Backdrop/Backdrop';
+import Button from '../../../../components/UI/Button/Button';
 
 class MovieDetail extends React.Component {
   state = {
@@ -11,6 +15,7 @@ class MovieDetail extends React.Component {
     voteAverage: null,
     title: '',
     release_date: null,
+    show: false,
   }
 
   player = null;
@@ -81,8 +86,7 @@ class MovieDetail extends React.Component {
     }
   }
 
-
-  initPlayer() {
+ initPlayer() {
     this.player = new shaka.Player(this.refs.video);
     // Listen for error events.
     this.player.addEventListener('error', this.onErrorEvent);
@@ -98,8 +102,36 @@ class MovieDetail extends React.Component {
     console.error('Error code', error.code, 'object', error);
   }
 
+  showVideoHandler = () => {
+    this.setState({
+      show: !this.state.show
+    })
+  }
+
   render() {
-  
+    console.log(this.props);
+    let backdrop = null;
+    let video = null;
+    if(this.state.show) {
+      backdrop = <Backdrop show={this.state.show} clicked={this.showVideoHandler} />
+      video = (
+        <div className={classes.MovieVideo}>
+          <video ref="video"
+            width="1350"
+            controls>
+          </video>
+        </div>
+      );
+    } else {
+      video = (
+        <div className={classes.MovieVideoHide}>
+          <video ref="video"
+            width="1350"
+            controls>
+          </video>
+        </div>
+      );
+    }
 
     return (
       <div data-aos="fade-left">
@@ -107,21 +139,19 @@ class MovieDetail extends React.Component {
         <div className={classes.MovieDescription}>
             <h1>{this.state.title}</h1>
             <h1 className={classes.MovieSummary}>{this.state.overview}</h1>
+
             <div className={classes.MovieMetaData}>
+              <NavLink to="/" className={style.Button}>Home</NavLink>
               <h2>IMDB Rating: {this.state.voteAverage}</h2>
               <h3>Release date: {this.state.release_date}</h3>
-              <a className={classes.MovieButton} href="/">Watch now</a>
+              <Button clicked={this.showVideoHandler}>Watch now</Button>
             </div>
         </div>
         <img className={classes.MovieImage} src={this.state.image} />
       </div>
 
-      <h2>Player</h2>
-        <video ref="video"
-          width="850"
-          poster={this.state.image}
-          controls>
-        </video>
+        {backdrop}
+        {video}
       </div>
     )
   }

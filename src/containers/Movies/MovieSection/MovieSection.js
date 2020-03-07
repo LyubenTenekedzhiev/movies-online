@@ -50,9 +50,9 @@ class MovieSection extends React.Component {
 
   // "Pagination"
   nextPageHandler = () => {
-    if(this.state.movies.length - this.state.firstMovie >= 13) {
+    if(this.state.movies.length - this.state.firstMovie >= 11) {
       this.setState({
-        firstMovie: this.state.firstMovie += 7,
+        firstMovie: this.state.firstMovie += 6,
       }) 
     } else {
       this.setState({
@@ -63,9 +63,9 @@ class MovieSection extends React.Component {
     }
   } 
   prevPageHandler = () => {
-    if(this.state.movies.length - this.state.firstMovie <= 13) {
+    if(this.state.movies.length - this.state.firstMovie <= 15) {
       this.setState({
-        firstMovie: this.state.firstMovie -= 7,
+        firstMovie: this.state.firstMovie -= 6,
       }) 
     } else {
       if(this.state.pageNumber <= 1) {
@@ -95,14 +95,13 @@ class MovieSection extends React.Component {
         <>
           {this.state.movies.slice(this.state.firstMovie).map(movie => (
                   <Movie 
-                        key={movie.id} 
+                        key={movie.id}
                         clicked={() => this.showDetailHandler(movie.id)}
                         { ...movie } />
           ))}
         </>
       )
     }
-
 
     return (
       <div className={classes.MovieSection}>
@@ -114,6 +113,8 @@ class MovieSection extends React.Component {
                 <Button clicked={this.nextPageHandler}>Next page</Button>
             </div>
       </div>
+
+      
     )
   }
 }

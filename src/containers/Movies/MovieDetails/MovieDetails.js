@@ -21,6 +21,11 @@ class MovieDetail extends React.Component {
   player = null;
 
   componentDidMount() {
+    // Checking if the state is not iterable
+    if(!this.props.location.state) {
+      console.log(this.props.location.state);
+      this.props.history.goBack()
+    }
     // Fetching state from the previous location
     for(let movie of this.props.location.state) {
       if(movie.id === Number(this.props.match.params.id)) {
@@ -130,5 +135,6 @@ class MovieDetail extends React.Component {
     )
   }
 }
+
 
 export default MovieDetail;

@@ -1,5 +1,5 @@
 .Movie {
-  width: 15.65vw;
+  width: 11.75vw;
   height: 40vh;
   margin-left: .5rem;
   transition: .4s all;
@@ -17,7 +17,7 @@
   background-color: rgba(245, 245, 220, 0.274);
   text-align: center;
   margin-left: .5rem;
-  width: 15.65vw;
+  width: 11.75vw;
   font-family: "Nunito";
   border-radius: 3px;
   font-size: .8rem;
@@ -26,6 +26,16 @@
   color: white;
 }
 
+@media (max-width: 1175px) {
+  .Movie {
+    height: 35vh;
+    width: 13vw;
+  }
+  .MovieTitle {
+    font-size: .6rem;
+    width: 13vw;
+  }
+}
 @media (max-width: 1001px) {
   .Movie {
     height: 30vh;

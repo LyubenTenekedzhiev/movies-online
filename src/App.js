@@ -1,12 +1,21 @@
 import React from 'react';
 import './App.css';
 
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, Redirect } from 'react-router-dom';
+import asyncComponent from './hoc/asyncComponent';
 
 import Movies from './containers/Movies/Movies';
-import MovieDetails from './containers/Movies/MovieDetails/MovieDetails';
 import Navigation from './components/UI/Navigation/Navigation';
-import SearchMovies from './containers/SearchMovies/SearchMovies';
+// import MovieDetails from './containers/Movies/MovieDetails/MovieDetails';
+// import SearchMovies from './containers/SearchMovies/SearchMovies';
+
+const AsyncMovieDetails = asyncComponent(() => {
+  return import('./containers/Movies/MovieDetails/MovieDetails');
+});
+
+const AsyncSearchMovies = asyncComponent(() => {
+  return import('./containers/SearchMovies/SearchMovies');
+});
 
 function App() {
   return (
@@ -14,8 +23,9 @@ function App() {
       <Navigation />
       <Switch>
         <Route path="/" component={Movies} exact />
-        <Route path="/movieDetails/:id" component={MovieDetails} />
-        <Route path="/search" component={SearchMovies} />
+        <Route path="/movieDetails/:id" component={AsyncMovieDetails} />
+        <Route path="/search" component={AsyncSearchMovies} />
+        <Redirect from='/' to='/' />
       </Switch>
     </div>
   );

@@ -11,7 +11,7 @@ class Movies extends React.Component {
     return (
       <div>
           <h1 className={classes.Title}>Popular movies</h1>
-            <MovieSection api={this.props.urls.popularMovies} />
+              <MovieSection api={this.props.urls.popularMovies} />
 
           <h1 className={classes.Title}>Popular series</h1>
             <MovieSection api={this.props.urls.popularSeries} />

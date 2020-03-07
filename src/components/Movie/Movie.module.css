@@ -1,5 +1,5 @@
 .Movie {
-  width: 12vw;
+  width: 15.65vw;
   height: 40vh;
   margin-left: .5rem;
   transition: .4s all;
@@ -17,13 +17,54 @@
   background-color: rgba(245, 245, 220, 0.274);
   text-align: center;
   margin-left: .5rem;
-  width: 12vw;
+  width: 15.65vw;
   font-family: "Nunito";
   border-radius: 3px;
   font-size: .8rem;
   padding: .2rem;
   margin-top: -3.3rem;
   color: white;
+}
+
+@media (max-width: 1001px) {
+  .Movie {
+    height: 30vh;
+    width: 15vw;
+  }
+  .MovieTitle {
+    font-size: .6rem;
+    width: 15vw;
+  }
+}
+@media (max-width: 625px) {
+  .Movie {
+    width: 20vw;
+  }
+  .MovieTitle {
+    font-size: .6rem;
+    width: 20vw;
+  }
+}
+
+@media (max-width: 450px) {
+  .Movie {
+    width: 25vw;
+  }
+  .MovieTitle {
+    width: 25vw;
+  }
+}
+
+@media (max-width: 350px) {
+  .Movie {
+    height: 25vh;
+    width: 30vw;
+    margin-bottom: 3.3rem;
+  }
+  .MovieTitle {
+    width: 30vw;
+    font-size: .5rem;
+  }
 }
 
 @keyframes slideIn {

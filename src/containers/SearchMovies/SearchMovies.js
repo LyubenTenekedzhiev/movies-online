@@ -5,6 +5,7 @@ import classes from './SearchMovies.module.css';
 import Searchbar from '../../components/UI/Searchbar/Searchbar';
 import Button from '../../components/UI/Button/Button';
 import Movie from '../../components/Movie/Movie';
+import Spinner from '../../components/UI/Spinner/Spinner';
 
 class SearchMovies extends React.Component {
   state = {
@@ -32,6 +33,9 @@ class SearchMovies extends React.Component {
           })
         }).catch(error => {
           console.log(error.response)
+          this.setState({
+            loading: true,
+          })
         }).finally( 
           this.setState({
             loading: false
@@ -68,9 +72,7 @@ class SearchMovies extends React.Component {
   }
 
   render() {
-    let content = (
-      <h1>Loading...</h1>
-    )
+    let content = <Spinner />;
 
     if(!this.state.loading) {
       content = (

@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import * as actions from '../../store/actions/index';
 
 import classes from './Movies.module.css';
 import MovieSection from './MovieSection/MovieSection';
@@ -12,16 +11,16 @@ class Movies extends React.Component {
     return (
       <div>
           <h1 className={classes.Title}>Popular movies</h1>
-            <MovieSection url={this.props.urls.popularMovies} />
+            <MovieSection api={this.props.urls.popularMovies} />
 
           <h1 className={classes.Title}>Popular series</h1>
-            <MovieSection url={this.props.urls.popularSeries} />
+            <MovieSection api={this.props.urls.popularSeries} />
 
           <h1 className={classes.Title}>Family movies</h1>
-            <MovieSection url={this.props.urls.familyMovies} />
+            <MovieSection api={this.props.urls.familyMovies} />
 
           <h1 className={classes.Title}>Documentaries</h1>
-            <MovieSection url={this.props.urls.documentaries} />
+            <MovieSection api={this.props.urls.documentaries} />
       </div>
     )
   }
@@ -33,10 +32,4 @@ const mapStateToProps = state => {
   }
 }
 
-const mapDispatchToProps = dispatch => {
-  return {
-    onFetchMovies: (url) => dispatch(actions.fetchMovies(url)),
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Movies);
+export default connect(mapStateToProps)(Movies);

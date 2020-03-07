@@ -4,3 +4,27 @@
   padding: 3rem 0 1rem 1rem;
 }
 
+@media (max-width: 1001px) {
+  .Title {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 625px) {
+  .Title {
+    font-size: 1.3rem;
+    padding-bottom: .6rem;
+  }
+}
+
+@media (max-width: 625px) {
+  .Title {
+    font-size: 1.15rem;
+  }
+}
+
+@media (max-width: 350px) {
+  .Title {
+    font-size: 1rem;
+  }
+}

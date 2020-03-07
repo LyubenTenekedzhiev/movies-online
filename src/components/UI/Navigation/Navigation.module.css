@@ -21,3 +21,17 @@
 .NavigationItem:hover {
   border-bottom: 1.5px solid white;
 }
+
+@media (max-width: 1001px) {
+  .NavigationItem {
+    font-size: 1rem;
+    margin: .7rem;
+  }
+}
+
+@media (max-width: 350px) {
+  .NavigationItem {
+    font-size: .75rem;
+    margin-bottom: .6rem;
+  }
+}

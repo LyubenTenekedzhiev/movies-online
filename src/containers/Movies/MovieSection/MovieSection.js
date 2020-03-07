@@ -2,11 +2,11 @@ import React from 'react';
 import axios from 'axios';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import * as actions from '../../../store/actions/index';
 
 import classes from './MovieSection.module.css';
 import Movie from '../../../components/Movie/Movie';
 import Button from '../../../components/UI/Button/Button';
+import Spinner from '../../../components/UI/Spinner/Spinner';
 
 class MovieSection extends React.Component {
   state = {
@@ -14,7 +14,6 @@ class MovieSection extends React.Component {
     firstMovie: 0,
     pageNumber: 1,
     loading: false,
-    url: '',
   }
 
   componentDidMount() {
@@ -23,13 +22,13 @@ class MovieSection extends React.Component {
 
   // Fetching movies
   fetchMoviesHandler = () => {
-    if (this.props.url) {
+    if (this.props.api) {
       this.setState({ 
           loading: true,
           movies: []
       })
     }
-    axios.get(this.props.url + '&page=' + this.state.pageNumber)
+    axios.get(this.props.api + '&page=' + this.state.pageNumber)
           .then(response => {
             const updatedMovies = [...this.state.movies];
             updatedMovies.push(response.data.results);
@@ -40,13 +39,16 @@ class MovieSection extends React.Component {
             // console.log(response.data)
           }).catch(error => {
             console.log(error)
+            this.setState({
+              loading: true
+            })
           }).finally( 
             this.setState({
               loading: false
             }))
   }
 
-  // Pagination
+  // "Pagination"
   nextPageHandler = () => {
     if(this.state.movies.length - this.state.firstMovie >= 13) {
       this.setState({
@@ -82,37 +84,13 @@ class MovieSection extends React.Component {
 
   // Building queries to show detailed info about a movie
   showDetailHandler = ( id ) => {
-    // const queryParams = [];
-    // const findMovie = [...this.state.movies];
-    // let movieItem = '';
-    // findMovie.map(movie => {
-    //   if(movie.id === id) {
-    //     movieItem = movie;
-    //   }
-    // })
-    // queryParams.push(encodeURIComponent('overview') + '=' + encodeURIComponent(movieItem.overview));
-    // queryParams.push(encodeURIComponent('poster') + '=' + encodeURIComponent(movieItem.poster_path));
-    // queryParams.push(encodeURIComponent('voteAvg') + '=' + encodeURIComponent(movieItem.vote_average));
-    // // Checking if it's title or name AND realease_date or first_air_date
-    // if(movieItem.title)          queryParams.push(encodeURIComponent('title') + '=' + encodeURIComponent(movieItem.title));
-    // if(movieItem.name)           queryParams.push(encodeURIComponent('name') + '=' + encodeURIComponent(movieItem.name));
-    // if(movieItem.release_date)   queryParams.push(encodeURIComponent('release_date') + '=' + encodeURIComponent(movieItem.release_date));
-    // if(movieItem.first_air_date) queryParams.push(encodeURIComponent('first_air_date') + '=' + encodeURIComponent(movieItem.first_air_date));
-    // const queryString = queryParams.join('&');
-    // this.props.history.push({
-    //     	pathname: '/movieDetails',
-    //     	search: '?' + queryString
-    //   })
     this.props.history.push('/movieDetails/' + id, this.state.movies)
   }
 
-
   render() {
-    let content = (
-      <h1>Loading...</h1>
-    )
+    let content = <Spinner />;
 
-    if(!this.props.loading) {
+    if(!this.state.loading) {
       content = (
         <>
           {this.state.movies.slice(this.state.firstMovie).map(movie => (
@@ -124,6 +102,7 @@ class MovieSection extends React.Component {
         </>
       )
     }
+
 
     return (
       <div className={classes.MovieSection}>
@@ -146,10 +125,4 @@ const mapStateToProps = state => {
   }
 }
 
-const mapDispatchToProps = dispatch => {
-  return {
-    onFetchMovies: (url) => dispatch(actions.fetchMovies(url)),
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(MovieSection));
+export default connect(mapStateToProps)(withRouter(MovieSection));

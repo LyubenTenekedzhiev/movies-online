@@ -1,5 +1,5 @@
 .Button {
-  font-size: 1.3rem;
+  font-size: 1rem;
   font-family: "Nunito";
   font-weight: 300;
   text-decoration: none;
@@ -15,4 +15,25 @@
 
 .Button:hover {
   transform: scale(1.1);
+}
+
+@media (max-width: 1001px) {
+  .Button {
+    padding: .75rem;
+    font-size: .7rem;
+  }
+}
+
+@media (max-width: 450px) {
+  .Button {
+    padding: .6rem;
+    font-size: .6rem;
+  }
+}
+
+@media (max-width: 350px) {
+  .Button {
+    padding-bottom: .5rem;
+    font-size: .5rem;
+  }
 }

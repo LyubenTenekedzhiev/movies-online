@@ -14,4 +14,13 @@
   color: white;
   font-family: "Nunito";
   font-size: 1.3rem;
+  transition: .5s all;
+}
+
+@media (max-width: 875px) {
+  .Searchbar {
+    width: 50vw;
+    height: 2rem;
+    font-size: 1.2rem;
+  }
 }

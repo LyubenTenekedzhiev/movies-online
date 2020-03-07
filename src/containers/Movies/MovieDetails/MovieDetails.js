@@ -21,6 +21,7 @@ class MovieDetail extends React.Component {
   player = null;
 
   componentDidMount() {
+    // Fetching state from the previous location
     for(let movie of this.props.location.state) {
       if(movie.id === Number(this.props.match.params.id)) {
         this.setState({
@@ -32,29 +33,6 @@ class MovieDetail extends React.Component {
         })
       }
     }
-
-    // Fetching data from the URL
-    // const queryParams = new URLSearchParams(this.props.location.search);
-    // let overview = '';
-    // let image = "http://image.tmdb.org/t/p/w342";
-    // let voteAverage = null;
-    // let title = '';
-    // let release_date = null;
-    // for(let param of queryParams) {
-    // //['key', 'value']
-    //   if(param[0] === 'overview') overview = param[1];
-    //   if(param[0] === 'poster')   image += param[1];
-    //   if(param[0] === 'voteAvg') voteAverage = param[1];
-    //   if(param[0] === 'title' || param[0] === 'name') title = param[1];
-    //   if(param[0] === 'release_date' || param[0] === 'first_air_date') release_date = param[1];
-    // }
-    // this.setState({
-    //   overview: overview,
-    //   image: image,
-    //   voteAverage: voteAverage,
-    //   title: title,
-    //   release_date: release_date
-    // });
 
 
     let config = {
@@ -122,12 +100,13 @@ class MovieDetail extends React.Component {
       video = (
         <div className={classes.MovieVideo}>
           <video ref="video"
-            width="1350"
+            className={classes.VideoFrame}
             controls>
           </video>
         </div>
       );
     } 
+
 
     return (
       <div data-aos="fade-left">
@@ -145,7 +124,6 @@ class MovieDetail extends React.Component {
         </div>
         <img className={classes.MovieImage} src={this.state.poster} alt={this.state.title} />
       </div>
-
         {backdrop}
         {video}
       </div>

@@ -18,13 +18,14 @@
 
 .MovieSummary {
   font-weight: 300;
-  font-size: 1.7rem;
+  font-size: 1.3rem;
 }
 
 .MovieMetaData {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  font-size: .8rem;
 }
 
 .MovieImage {
@@ -50,6 +51,10 @@
   animation: slideIn 1s;
 }
 
+.VideoFrame {
+  width: 88vw;
+}
+
 .MovieVideoHide {
   display: none;
 }
@@ -60,5 +65,89 @@
   }
   100% {
     transform: translate(0%);
+  }
+}
+
+@media (max-width: 1246px) {
+  .MovieVideo{
+    top: 22%;
+  }
+}
+
+@media (max-width: 600px) {
+  .VideoFrame {
+    
+  }
+}
+
+@media (max-width: 1075px) {
+  .MovieImage {
+    height: 55vh;
+  }
+  .MovieDescription{
+    font-size: .7rem;
+  }
+  .MovieSummary {
+    font-size: 1.05rem;
+  }
+  .MovieMetaData{
+    font-size: .6rem;
+  }
+}
+
+@media (max-width: 799px) {
+  .MovieImage {
+    height: 45vh;
+  }
+  .MovieDescription{
+    font-size: .5rem;
+  }
+  .MovieSummary {
+    font-size: .9rem;
+  }
+  .MovieMetaData{
+    font-size: .5rem;
+    padding-bottom: .3rem;
+  }
+}
+
+@media (max-width: 699px) {
+  .MovieImage {
+    height: 35vh;
+  }
+  .MovieDescription{
+    font-size: .4rem;
+  }
+  .MovieSummary {
+    font-size: .7rem;
+  }
+  .MovieMetaData{
+    font-size: .35rem;
+    padding-bottom: .3rem;
+  }
+}
+
+@media (max-width: 585px) {
+  .MovieImage {
+    height: 30vh;
+  }
+  .MovieDescription{
+    font-size: .3rem;
+  }
+  .MovieSummary {
+    font-size: .5rem;
+  }
+  .MovieMetaData{
+    flex-direction: column-reverse;
+    align-items: flex-start;
+    height: 10rem;
+    font-size: .35rem;
+    padding-bottom: .3rem;
+  }
+}
+
+@media (max-width: 350px) {
+  .MovieMetaData {
+    height: 7rem;
   }
 }

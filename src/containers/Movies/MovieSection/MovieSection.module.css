@@ -7,6 +7,8 @@
 
 .Movies {
   display: flex;
+  height: 40vh;
+  transition: 1s all;
 }
 
 .MovieButtons {

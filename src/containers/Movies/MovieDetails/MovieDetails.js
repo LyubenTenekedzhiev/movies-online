@@ -3,15 +3,15 @@ import shaka from 'shaka-player';
 import HLS from 'hls.js';
 
 import classes from './MovieDetails.module.css';
-import style from '../../../../components/UI/Button/Button.module.css'
+import style from '../../../components/UI/Button/Button.module.css'
 import {NavLink} from 'react-router-dom';
-import Backdrop from '../../../../components/UI/Backdrop/Backdrop';
-import Button from '../../../../components/UI/Button/Button';
+import Backdrop from '../../../components/UI/Backdrop/Backdrop';
+import Button from '../../../components/UI/Button/Button';
 
 class MovieDetail extends React.Component {
   state = {
     overview: '',
-    image: '',
+    poster: "http://image.tmdb.org/t/p/w342",
     voteAverage: null,
     title: '',
     release_date: null,
@@ -21,28 +21,40 @@ class MovieDetail extends React.Component {
   player = null;
 
   componentDidMount() {
-    // Fetching data from the URL
-    const queryParams = new URLSearchParams(this.props.location.search);
-    let overview = '';
-    let image = "http://image.tmdb.org/t/p/w342";
-    let voteAverage = null;
-    let title = '';
-    let release_date = null;
-    for(let param of queryParams) {
-    //['key', 'value']
-      if(param[0] === 'overview') overview = param[1];
-      if(param[0] === 'poster')   image += param[1];
-      if(param[0] === 'voteAvg') voteAverage = param[1];
-      if(param[0] === 'title' || param[0] === 'name') title = param[1];
-      if(param[0] === 'release_date' || param[0] === 'first_air_date') release_date = param[1];
+    for(let movie of this.props.location.state) {
+      if(movie.id === Number(this.props.match.params.id)) {
+        this.setState({
+          title: movie.title || movie.name,
+          overview: movie.overview,
+          poster: this.state.poster + movie.poster_path || this.state.poster + movie.backdrop_path,
+          voteAverage: movie.vote_average,
+          release_date: movie.release_date || movie.first_air_date,
+        })
+      }
     }
-    this.setState({
-      overview: overview,
-      image: image,
-      voteAverage: voteAverage,
-      title: title,
-      release_date: release_date
-    });
+
+    // Fetching data from the URL
+    // const queryParams = new URLSearchParams(this.props.location.search);
+    // let overview = '';
+    // let image = "http://image.tmdb.org/t/p/w342";
+    // let voteAverage = null;
+    // let title = '';
+    // let release_date = null;
+    // for(let param of queryParams) {
+    // //['key', 'value']
+    //   if(param[0] === 'overview') overview = param[1];
+    //   if(param[0] === 'poster')   image += param[1];
+    //   if(param[0] === 'voteAvg') voteAverage = param[1];
+    //   if(param[0] === 'title' || param[0] === 'name') title = param[1];
+    //   if(param[0] === 'release_date' || param[0] === 'first_air_date') release_date = param[1];
+    // }
+    // this.setState({
+    //   overview: overview,
+    //   image: image,
+    //   voteAverage: voteAverage,
+    //   title: title,
+    //   release_date: release_date
+    // });
 
 
     let config = {
@@ -52,34 +64,21 @@ class MovieDetail extends React.Component {
 
     // Install built-in polyfills to patch browser incompatibilities.
     shaka.polyfill.installAll();
-    // Check to see if the browser supports the basic APIs Shaka needs.
     if (shaka.Player.isBrowserSupported()) {
-      // Everything looks good!
       this.initPlayer();
     } else {
-      // This browser does not have the minimum set of APIs we need.
       console.error('Browser not supported!');
     }
  
     if (config.progressive !== '') {
-      // Try to load a manifest/url.
       this.player.load(config.progressive).then(res =>  {
-        // This runs if the asynchronous load is successful.
         console.log('The video has now been loaded! ' + config.progressive);
-        // console.log(this.player.Eb)
         if(HLS.isSupported()) {
           let hls = new HLS();
-          // binding them together
-          console.log(this.player.Eb)
           hls.attachMedia(this.player.a);
-          // MEDIA_ATTACHED event is fired by hls object once MediaSource is ready
           hls.on(HLS.Events.MEDIA_ATTACHED, function () {
-            console.log("video and hls.js are now bound together !");
+            // console.log("video and hls.js are now bound together !");
             hls.loadSource(config.hls);
-            hls.on(HLS.Events.MANIFEST_PARSED, function (event, data) {
-              console.log("manifest loaded, found " + data.levels.length + " quality level");
-            });
- 
           });
         }
       }).catch(this.onError);  // onError is executed if the asynchronous load fails.
@@ -93,12 +92,11 @@ class MovieDetail extends React.Component {
   }
 
   onErrorEvent(event) {
-    // Extract the shaka.util.Error object from the event.
     this.onError(event.detail);
   }
 
+  // Log the error.
   onError(error) {
-    // Log the error.
     console.error('Error code', error.code, 'object', error);
   }
 
@@ -109,9 +107,16 @@ class MovieDetail extends React.Component {
   }
 
   render() {
-    console.log(this.props);
     let backdrop = null;
-    let video = null;
+    let video = (
+        <div className={classes.MovieVideoHide}>
+          <video ref="video"
+            width="1350"
+            controls>
+          </video>
+        </div>
+      )
+
     if(this.state.show) {
       backdrop = <Backdrop show={this.state.show} clicked={this.showVideoHandler} />
       video = (
@@ -122,16 +127,7 @@ class MovieDetail extends React.Component {
           </video>
         </div>
       );
-    } else {
-      video = (
-        <div className={classes.MovieVideoHide}>
-          <video ref="video"
-            width="1350"
-            controls>
-          </video>
-        </div>
-      );
-    }
+    } 
 
     return (
       <div data-aos="fade-left">
@@ -147,7 +143,7 @@ class MovieDetail extends React.Component {
               <Button clicked={this.showVideoHandler}>Watch now</Button>
             </div>
         </div>
-        <img className={classes.MovieImage} src={this.state.image} />
+        <img className={classes.MovieImage} src={this.state.poster} alt={this.state.title} />
       </div>
 
         {backdrop}

@@ -9,20 +9,21 @@
 }
 
 .Movie:hover {
-  transform: scale(1.03);
-  cursor: pointer;
+  transform: scale(1.04);
 }
+
 
 .MovieTitle {
   background-color: rgba(245, 245, 220, 0.274);
   text-align: center;
-  margin-left: .7rem;
+  margin-left: .5rem;
   width: 12vw;
   font-family: "Nunito";
   border-radius: 3px;
   font-size: .8rem;
   padding: .2rem;
   margin-top: -3.3rem;
+  color: white;
 }
 
 @keyframes slideIn {

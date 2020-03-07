@@ -1,11 +1,10 @@
 import React from 'react';
 import axios from 'axios';
-import { NavLink } from 'react-router-dom';
 
 import classes from './SearchMovies.module.css';
 import Searchbar from '../../components/UI/Searchbar/Searchbar';
 import Button from '../../components/UI/Button/Button';
-import Movie from '../Movies/MovieSection/Movie/Movie';
+import Movie from '../../components/Movie/Movie';
 
 class SearchMovies extends React.Component {
   state = {
@@ -23,7 +22,7 @@ class SearchMovies extends React.Component {
         movies: []
     })
   }
-  axios.get(this.state.url + '&query=' + this.state.query)
+  axios.get(this.state.url +'&query=' + this.state.query)
         .then(response => {
           const updatedMovies = [...this.state.movies];
           updatedMovies.concat(response.data.results);
@@ -63,6 +62,11 @@ class SearchMovies extends React.Component {
     })
   }
 
+  // finding details about the movie
+  showDetailHandler = ( id ) => {
+    this.props.history.push('/movieDetails/' + id, this.state.movies)
+  }
+
   render() {
     let content = (
       <h1>Loading...</h1>
@@ -75,9 +79,9 @@ class SearchMovies extends React.Component {
             return (movie.poster_path !== null) && (movie.profile_path !== null) && (movie.backdrop_path !== null)
           }).map(movie => (
                   <Movie 
-                        key={movie.id} 
-                        // clicked={() => this.showDetailHandler(movie.id)}
+                        key={movie.id}
                         nextPage={this.nextPageHandler}
+                        clicked={() => this.showDetailHandler(movie.id)}
                         { ...movie } />
           ))}
         </>

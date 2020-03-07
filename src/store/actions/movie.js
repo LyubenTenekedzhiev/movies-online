@@ -29,7 +29,7 @@ export const fetchMovies = (url) => {
     axios.get(url)
           .then(response => {
             dispatch(fetchMoviesSuccess(response.data.results, response.data.page))  
-            console.log(response.data)
+            // console.log(response.data.results)
           }).catch(error => {
             dispatch(fetchMoviesFail(error));
           })

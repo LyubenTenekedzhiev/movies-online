@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import * as actions from '../../store/actions/index';
 
 import classes from './Movies.module.css';
 import MovieSection from './MovieSection/MovieSection';
@@ -7,19 +8,20 @@ import MovieSection from './MovieSection/MovieSection';
 class Movies extends React.Component {
 
   render() {
+
     return (
       <div>
           <h1 className={classes.Title}>Popular movies</h1>
-            <MovieSection url={this.props.popularMovies} />
+            <MovieSection url={this.props.urls.popularMovies} />
 
           <h1 className={classes.Title}>Popular series</h1>
-            <MovieSection url={this.props.popularSeries} />
+            <MovieSection url={this.props.urls.popularSeries} />
 
           <h1 className={classes.Title}>Family movies</h1>
-            <MovieSection url={this.props.familyMovies} />
+            <MovieSection url={this.props.urls.familyMovies} />
 
           <h1 className={classes.Title}>Documentaries</h1>
-            <MovieSection url={this.props.documentaries} />
+            <MovieSection url={this.props.urls.documentaries} />
       </div>
     )
   }
@@ -27,11 +29,14 @@ class Movies extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    popularMovies: state.movieReducer.popularMovies,
-    popularSeries: state.movieReducer.popularSeries,
-    familyMovies: state.movieReducer.familyMovies,
-    documentaries: state.movieReducer.documentaries,
+    urls: state.movieReducer.urls
   }
 }
 
-export default connect(mapStateToProps)(Movies);
+const mapDispatchToProps = dispatch => {
+  return {
+    onFetchMovies: (url) => dispatch(actions.fetchMovies(url)),
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Movies);

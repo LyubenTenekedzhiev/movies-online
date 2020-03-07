@@ -1,9 +1,11 @@
 import React from 'react';
 import axios from 'axios';
-import { NavLink, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
+import * as actions from '../../../store/actions/index';
 
 import classes from './MovieSection.module.css';
-import Movie from './Movie/Movie';
+import Movie from '../../../components/Movie/Movie';
 import Button from '../../../components/UI/Button/Button';
 
 class MovieSection extends React.Component {
@@ -12,10 +14,11 @@ class MovieSection extends React.Component {
     firstMovie: 0,
     pageNumber: 1,
     loading: false,
+    url: '',
   }
 
   componentDidMount() {
-    this.fetchMoviesHandler();
+  this.fetchMoviesHandler();
   }
 
   // Fetching movies
@@ -29,7 +32,7 @@ class MovieSection extends React.Component {
     axios.get(this.props.url + '&page=' + this.state.pageNumber)
           .then(response => {
             const updatedMovies = [...this.state.movies];
-            updatedMovies.concat(response.data.results);
+            updatedMovies.push(response.data.results);
             this.setState({
               movies: this.state.movies.concat(response.data.results),
               loading: false
@@ -79,28 +82,28 @@ class MovieSection extends React.Component {
 
   // Building queries to show detailed info about a movie
   showDetailHandler = ( id ) => {
-    const queryParams = [];
-    const findMovie = [...this.state.movies];
-    let movieItem = '';
-    findMovie.map(movie => {
-      if(movie.id === id) {
-        movieItem = movie;
-      }
-    })
-    console.log(movieItem);
-    queryParams.push(encodeURIComponent('overview') + '=' + encodeURIComponent(movieItem.overview));
-    queryParams.push(encodeURIComponent('poster') + '=' + encodeURIComponent(movieItem.poster_path));
-    queryParams.push(encodeURIComponent('voteAvg') + '=' + encodeURIComponent(movieItem.vote_average));
-    // Checking if it's title or name AND realease_date or first_air_date
-    if(movieItem.title)          queryParams.push(encodeURIComponent('title') + '=' + encodeURIComponent(movieItem.title));
-    if(movieItem.name)           queryParams.push(encodeURIComponent('name') + '=' + encodeURIComponent(movieItem.name));
-    if(movieItem.release_date)   queryParams.push(encodeURIComponent('release_date') + '=' + encodeURIComponent(movieItem.release_date));
-    if(movieItem.first_air_date) queryParams.push(encodeURIComponent('first_air_date') + '=' + encodeURIComponent(movieItem.first_air_date));
-    const queryString = queryParams.join('&');
-    this.props.history.push({
-        	pathname: '/movieDetails',
-        	search: '?' + queryString
-      })
+    // const queryParams = [];
+    // const findMovie = [...this.state.movies];
+    // let movieItem = '';
+    // findMovie.map(movie => {
+    //   if(movie.id === id) {
+    //     movieItem = movie;
+    //   }
+    // })
+    // queryParams.push(encodeURIComponent('overview') + '=' + encodeURIComponent(movieItem.overview));
+    // queryParams.push(encodeURIComponent('poster') + '=' + encodeURIComponent(movieItem.poster_path));
+    // queryParams.push(encodeURIComponent('voteAvg') + '=' + encodeURIComponent(movieItem.vote_average));
+    // // Checking if it's title or name AND realease_date or first_air_date
+    // if(movieItem.title)          queryParams.push(encodeURIComponent('title') + '=' + encodeURIComponent(movieItem.title));
+    // if(movieItem.name)           queryParams.push(encodeURIComponent('name') + '=' + encodeURIComponent(movieItem.name));
+    // if(movieItem.release_date)   queryParams.push(encodeURIComponent('release_date') + '=' + encodeURIComponent(movieItem.release_date));
+    // if(movieItem.first_air_date) queryParams.push(encodeURIComponent('first_air_date') + '=' + encodeURIComponent(movieItem.first_air_date));
+    // const queryString = queryParams.join('&');
+    // this.props.history.push({
+    //     	pathname: '/movieDetails',
+    //     	search: '?' + queryString
+    //   })
+    this.props.history.push('/movieDetails/' + id, this.state.movies)
   }
 
 
@@ -109,14 +112,13 @@ class MovieSection extends React.Component {
       <h1>Loading...</h1>
     )
 
-    if(!this.state.loading) {
+    if(!this.props.loading) {
       content = (
         <>
           {this.state.movies.slice(this.state.firstMovie).map(movie => (
                   <Movie 
                         key={movie.id} 
                         clicked={() => this.showDetailHandler(movie.id)}
-                        nextPage={this.nextPageHandler}
                         { ...movie } />
           ))}
         </>
@@ -137,17 +139,17 @@ class MovieSection extends React.Component {
   }
 }
 
-// const mapStateToProps = state => {
-//   return {
-//     loading: state.movieReducer.loading,
+const mapStateToProps = state => {
+  return {
+    loading: state.movieReducer.loading,
+    movies: state.movieReducer.movies
+  }
+}
 
-//   }
-// }
+const mapDispatchToProps = dispatch => {
+  return {
+    onFetchMovies: (url) => dispatch(actions.fetchMovies(url)),
+  }
+}
 
-// const mapDispatchToProps = dispatch => {
-//   return {
-//     onFetchMovies: () => dispatch(actions.fetchMovies()),
-//   }
-// }
-
-export default withRouter(MovieSection);
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(MovieSection));

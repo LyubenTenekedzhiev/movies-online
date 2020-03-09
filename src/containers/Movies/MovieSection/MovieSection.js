@@ -36,7 +36,7 @@ class MovieSection extends React.Component {
               movies: this.state.movies.concat(response.data.results),
               loading: false
             })
-            // console.log(response.data)
+            console.log(response.data.results)
           }).catch(error => {
             console.log(error)
             this.setState({
@@ -93,7 +93,9 @@ class MovieSection extends React.Component {
     if(!this.state.loading) {
       content = (
         <>
-          {this.state.movies.slice(this.state.firstMovie).map(movie => (
+          {this.state.movies.filter(movie => {
+            return (movie.poster_path !== null) && (movie.profile_path !== null) && (movie.backdrop_path !== null)
+                          }).slice(this.state.firstMovie).map(movie => (
                   <Movie 
                         key={movie.id}
                         clicked={() => this.showDetailHandler(movie.id)}

@@ -4,7 +4,7 @@ import classes from "./Movies.module.css";
 import { APIsMovieSection } from "urlAPIs/urlAPIs";
 import MovieSection from "containers/Movies/MovieSection/MovieSection";
 
-class Movies extends React.Component {
+export class Movies extends React.Component {
   render() {
     return (
       <div>

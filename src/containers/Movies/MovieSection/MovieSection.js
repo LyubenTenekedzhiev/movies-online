@@ -2,7 +2,6 @@ import React from "react";
 import { withRouter } from "react-router-dom";
 
 import { fetchPage } from "functions/moviesAPI";
-import { findValidMovies } from "functions/filterFuntion";
 import { getMovieComponents } from "functions/getMovieComponents";
 
 import classes from "./MovieSection.module.css";
@@ -97,7 +96,7 @@ class MovieSection extends React.Component {
 
   render() {
     const { loading, firstMovie, itemsPerPage, movies } = this.state;
-    const visibleMovies = movies.filter(findValidMovies).slice(firstMovie, firstMovie + itemsPerPage);
+    const visibleMovies = movies.slice(firstMovie, firstMovie + itemsPerPage);
     const content = loading ? <Spinner /> : visibleMovies.map(getMovieComponents, this);
 
     return (

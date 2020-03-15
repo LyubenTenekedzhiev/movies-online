@@ -68,7 +68,6 @@ class SearchMovies extends React.Component {
       url: APIsSearchMovies.urlMovies
     });
   };
-
   // ... for SERIES
   searchSeriesHandler = () => {
     this.setState({

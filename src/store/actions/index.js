@@ -1,3 +1,0 @@
-export {
-  fetchMovies
-} from './movie';

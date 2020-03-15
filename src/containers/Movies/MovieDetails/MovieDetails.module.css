@@ -3,8 +3,8 @@
   justify-content: space-evenly;
   width: 90vw;
   margin: auto;
-  margin-top: 2.5rem;
-  box-shadow: 0 0 1rem rgba(0,0,0,.5);
+  margin-top: 3rem;
+  box-shadow: 0 0 1rem rgba(0, 0, 0, 0.5);
 }
 
 .MovieDescription {
@@ -25,16 +25,16 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-size: .8rem;
+  font-size: 0.8rem;
 }
 
 .MovieImage {
-  height: 70vh;
+  height: 60vh;
   margin-top: 3rem;
   margin-bottom: 3rem;
-  box-shadow: 0 0 1rem rgba(255,255,255.6);
+  box-shadow: 0 0 1rem rgba(255, 255, 255.6);
   border-radius: 8px;
-  transition: .4s all;
+  transition: 0.4s all;
 }
 
 .MovieImage:hover {
@@ -46,7 +46,6 @@
   top: 14%;
   left: 5.5%;
   display: block;
-  /* transform: translate(-50%, -50%); */
   z-index: 3;
   animation: slideIn 1s;
 }
@@ -69,29 +68,22 @@
 }
 
 @media (max-width: 1246px) {
-  .MovieVideo{
+  .MovieVideo {
     top: 22%;
   }
 }
-
-@media (max-width: 600px) {
-  .VideoFrame {
-    
-  }
-}
-
 @media (max-width: 1075px) {
   .MovieImage {
-    height: 55vh;
+    height: 50vh;
   }
-  .MovieDescription{
-    font-size: .7rem;
+  .MovieDescription {
+    font-size: 0.7rem;
   }
   .MovieSummary {
     font-size: 1.05rem;
   }
-  .MovieMetaData{
-    font-size: .6rem;
+  .MovieMetaData {
+    font-size: 0.6rem;
   }
 }
 
@@ -99,15 +91,15 @@
   .MovieImage {
     height: 45vh;
   }
-  .MovieDescription{
-    font-size: .5rem;
+  .MovieDescription {
+    font-size: 0.5rem;
   }
   .MovieSummary {
-    font-size: .9rem;
+    font-size: 0.9rem;
   }
-  .MovieMetaData{
-    font-size: .5rem;
-    padding-bottom: .3rem;
+  .MovieMetaData {
+    font-size: 0.5rem;
+    padding-bottom: 0.3rem;
   }
 }
 
@@ -115,38 +107,43 @@
   .MovieImage {
     height: 35vh;
   }
-  .MovieDescription{
-    font-size: .4rem;
+  .MovieDescription {
+    font-size: 0.4rem;
   }
   .MovieSummary {
-    font-size: .7rem;
+    font-size: 0.7rem;
   }
-  .MovieMetaData{
-    font-size: .35rem;
-    padding-bottom: .3rem;
+  .MovieMetaData {
+    font-size: 0.35rem;
+    padding-bottom: 0.3rem;
   }
 }
 
 @media (max-width: 585px) {
   .MovieImage {
-    height: 30vh;
+    height: 25vh;
+    margin-top: 10rem;
   }
-  .MovieDescription{
-    font-size: .3rem;
+  .MovieDescription {
+    font-size: 0.3rem;
   }
   .MovieSummary {
-    font-size: .5rem;
+    font-size: 0.5rem;
   }
-  .MovieMetaData{
+  .MovieMetaData {
     flex-direction: column-reverse;
     align-items: flex-start;
     height: 10rem;
-    font-size: .35rem;
-    padding-bottom: .3rem;
+    font-size: 0.35rem;
+    padding-bottom: 0.3rem;
   }
 }
 
 @media (max-width: 350px) {
+  .MovieImage {
+    height: 20vh;
+    margin-top: 13rem;
+  }
   .MovieMetaData {
     height: 7rem;
   }

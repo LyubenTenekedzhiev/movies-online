@@ -7,6 +7,7 @@ import classes from "./MovieDetails.module.css";
 import style from "components/UI/Button/Button.module.css";
 import Backdrop from "components/UI/Backdrop/Backdrop";
 import Button from "components/UI/Button/Button";
+import img from "assets/no_image_available.jpeg";
 
 class MovieDetail extends React.Component {
   state = {
@@ -87,21 +88,17 @@ class MovieDetail extends React.Component {
 
   render() {
     const { show, title, overview, voteAverage, release_date, poster } = this.state;
-    let backdrop = null;
-    let video = (
+    const image = poster.slice(-4, poster.length) !== "null" ? poster : img;
+    const backdrop = show ? <Backdrop show={show} clicked={this.showVideoHandler} /> : null;
+    const video = show ? (
+      <div className={classes.MovieVideo}>
+        <video ref='video' className={classes.VideoFrame} controls></video>
+      </div>
+    ) : (
       <div className={classes.MovieVideoHide}>
         <video ref='video' controls></video>
       </div>
     );
-
-    if (show) {
-      backdrop = <Backdrop show={show} clicked={this.showVideoHandler} />;
-      video = (
-        <div className={classes.MovieVideo}>
-          <video ref='video' className={classes.VideoFrame} controls></video>
-        </div>
-      );
-    }
 
     return (
       <div data-aos='fade-left'>
@@ -119,7 +116,7 @@ class MovieDetail extends React.Component {
               <Button clicked={this.showVideoHandler}>Watch now</Button>
             </div>
           </div>
-          <img className={classes.MovieImage} src={poster} alt={title} />
+          <img className={classes.MovieImage} src={image} alt={title} />
         </div>
         {backdrop}
         {video}

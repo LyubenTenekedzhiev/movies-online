@@ -1,4 +1,5 @@
 import React from "react";
+import dompurify from 'dompurify';
 
 import { fetchPage } from "functions/moviesAPI";
 import { findValidMovies } from "functions/filterFuntion";
@@ -51,10 +52,11 @@ class SearchMovies extends React.Component {
   // Forming a search query
   buildSearchQueryHandler = event => {
     event.preventDefault();
+    const sanitizer = dompurify.sanitize;
     const query = event.target.value;
     this.setState(
       {
-        query: query
+        query: sanitizer(query)
       },
       () => {
         this.fetchMoviesHandler();

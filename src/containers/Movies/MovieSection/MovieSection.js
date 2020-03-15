@@ -1,12 +1,13 @@
-import React from 'react';
-import axios from 'axios';
-import { withRouter } from 'react-router-dom';
-import { connect } from 'react-redux';
+import React from "react";
+import { withRouter } from "react-router-dom";
 
-import classes from './MovieSection.module.css';
-import Movie from '../../../components/Movie/Movie';
-import Button from '../../../components/UI/Button/Button';
-import Spinner from '../../../components/UI/Spinner/Spinner';
+import { fetchPage } from "functions/moviesAPI";
+import { findValidMovies } from "functions/filterFuntion";
+import { getMovieComponents } from "functions/getMovieComponents";
+
+import classes from "./MovieSection.module.css";
+import Button from "components/UI/Button/Button";
+import Spinner from "components/UI/Spinner/Spinner";
 
 class MovieSection extends React.Component {
   state = {
@@ -14,118 +15,101 @@ class MovieSection extends React.Component {
     firstMovie: 0,
     pageNumber: 1,
     loading: false,
-  }
+    itemsPerPage: 8
+  };
 
   componentDidMount() {
-  this.fetchMoviesHandler();
+    this.fetchNextSetOfMovies();
+    this.updateWindowDimensions();
+    window.addEventListener("resize", this.updateWindowDimensions);
   }
 
-  // Fetching movies
-  fetchMoviesHandler = () => {
-    if (this.props.api) {
-      this.setState({ 
-          loading: true,
-          movies: []
-      })
-    }
-    axios.get(this.props.api + '&page=' + this.state.pageNumber)
-          .then(response => {
-            const updatedMovies = [...this.state.movies];
-            updatedMovies.push(response.data.results);
-            this.setState({
-              movies: this.state.movies.concat(response.data.results),
-              loading: false
-            })
-            console.log(response.data.results)
-          }).catch(error => {
-            console.log(error)
-            this.setState({
-              loading: true
-            })
-          }).finally( 
-            this.setState({
-              loading: false
-            }))
+  componentWillUnmount() {
+    window.removeEventListener("resize", this.updateWindowDimensions);
   }
+  // Adjusting the pagination according to the screen width
+  updateWindowDimensions = () => {
+    const { itemsPerPage } = this.state;
+    const width = window.innerWidth;
+    if (width <= 449) {
+      this.setState({ itemsPerPage: 3 });
+    } else if ((width >= 450 && width < 625) || itemsPerPage < 4) {
+      this.setState({ itemsPerPage: 4 });
+    } else if ((width >= 625 && width < 1001) || itemsPerPage < 6) {
+      this.setState({ itemsPerPage: 6 });
+    } else if ((width >= 1001 && width < 1175) || itemsPerPage < 7) {
+      this.setState({ itemsPerPage: 7 });
+    } else if (width >= 1175 || itemsPerPage < 8) {
+      this.setState({ itemsPerPage: 8 });
+    }
+  };
+
+  fetchNextSetOfMovies = async () => {
+    if (this.props.api) {
+      this.setState({
+        loading: true
+      });
+    }
+    try {
+      const nextPage = await fetchPage(this.props.api, "&page=", this.state.pageNumber);
+      this.setState(prevState => {
+        return {
+          ...prevState,
+          movies: [...prevState.movies, ...nextPage],
+          loading: false
+        };
+      });
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
 
   // "Pagination"
-  nextPageHandler = () => {
-    if(this.state.movies.length - this.state.firstMovie >= 11) {
-      this.setState({
-        firstMovie: this.state.firstMovie += 6,
-      }) 
-    } else {
-      this.setState({
-        pageNumber: this.state.pageNumber += 1,
-        firstMovie: this.state.firstMovie = 0,
-      })
-      this.fetchMoviesHandler();
-    }
-  } 
-  prevPageHandler = () => {
-    if(this.state.movies.length - this.state.firstMovie <= 15) {
-      this.setState({
-        firstMovie: this.state.firstMovie -= 6,
-      }) 
-    } else {
-      if(this.state.pageNumber <= 1) {
-        this.setState({
-          pageNumber: this.state.pageNumber = 1
-        })
-      } else {
-        this.setState({
-          pageNumber: this.state.pageNumber -= 1,
-          firstMovie: this.state.firstMovie = 0,
-        })
-        this.fetchMoviesHandler();
+  nextPageClickHandler = () => {
+    const { itemsPerPage, firstMovie, movies } = this.state;
+    this.setState(
+      prevState => ({
+        firstMovie: Math.min(prevState.firstMovie + itemsPerPage, prevState.movies.length - itemsPerPage)
+      }),
+      () => {
+        if (firstMovie + itemsPerPage >= movies.length - itemsPerPage) {
+          this.setState(
+            prevState => ({ pageNumber: prevState.pageNumber + 1 }),
+            () => {
+              this.fetchNextSetOfMovies();
+            }
+          );
+        }
       }
-    }
-  } 
+    );
+  };
+  prevPageClickHandler = () => {
+    const { itemsPerPage } = this.state;
+    this.setState(prevState => ({
+      firstMovie: Math.max(prevState.firstMovie - itemsPerPage, 0)
+    }));
+  };
 
-  // Building queries to show detailed info about a movie
-  showDetailHandler = ( id ) => {
-    this.props.history.push('/movieDetails/' + id, this.state.movies)
-  }
+  // Passing the data for the given movie
+  showDetailHandler = id => {
+    this.props.history.push("/movieDetails/" + id, this.state.movies);
+  };
 
   render() {
-    let content = <Spinner />;
-
-    if(!this.state.loading) {
-      content = (
-        <>
-          {this.state.movies.filter(movie => {
-            return (movie.poster_path !== null) && (movie.profile_path !== null) && (movie.backdrop_path !== null)
-                          }).slice(this.state.firstMovie).map(movie => (
-                  <Movie 
-                        key={movie.id}
-                        clicked={() => this.showDetailHandler(movie.id)}
-                        { ...movie } />
-          ))}
-        </>
-      )
-    }
+    const { loading, firstMovie, itemsPerPage, movies } = this.state;
+    const visibleMovies = movies.filter(findValidMovies).slice(firstMovie, firstMovie + itemsPerPage);
+    const content = loading ? <Spinner /> : visibleMovies.map(getMovieComponents, this);
 
     return (
       <div className={classes.MovieSection}>
-            <div className={classes.Movies}>
-              { content }
-            </div>
-            <div className={classes.MovieButtons}>
-                <Button clicked={this.prevPageHandler}>Previous page</Button>
-                <Button clicked={this.nextPageHandler}>Next page</Button>
-            </div>
+        <div className={classes.Movies}>{content}</div>
+        <div className={classes.MovieButtons}>
+          <Button clicked={this.prevPageClickHandler}>Previous page</Button>
+          <Button clicked={this.nextPageClickHandler}>Next page</Button>
+        </div>
       </div>
-
-      
-    )
+    );
   }
 }
 
-const mapStateToProps = state => {
-  return {
-    loading: state.movieReducer.loading,
-    movies: state.movieReducer.movies
-  }
-}
-
-export default connect(mapStateToProps)(withRouter(MovieSection));
+export default withRouter(MovieSection);

@@ -1,107 +1,101 @@
-import React from 'react';
-import axios from 'axios';
+import React from "react";
 
-import classes from './SearchMovies.module.css';
-import Searchbar from '../../components/UI/Searchbar/Searchbar';
-import Button from '../../components/UI/Button/Button';
-import Movie from '../../components/Movie/Movie';
-import Spinner from '../../components/UI/Spinner/Spinner';
+import { fetchPage } from "functions/moviesAPI";
+import { findValidMovies } from "functions/filterFuntion";
+import { getMovieComponents } from "functions/getMovieComponents";
+
+import classes from "./SearchMovies.module.css";
+import { APIsSearchMovies } from "urlAPIs/urlAPIs";
+import Searchbar from "components/UI/Searchbar/Searchbar";
+import Button from "components/UI/Button/Button";
+import Spinner from "components/UI/Spinner/Spinner";
 
 class SearchMovies extends React.Component {
   state = {
     movies: [],
-    url: 'https://api.themoviedb.org/3/search/movie?api_key=58964eae3ce65098adc94e1a7187c0e6&language=en-US&sort_by=popularity.desc&include_adult=false&page=1',
+    url: APIsSearchMovies.urlMovies,
     loading: false,
-    query: '',
-  }
+    query: ""
+  };
 
-   // Fetching movies
-  fetchMoviesHandler = () => {
-  if (this.state.url) {
-    this.setState({ 
+  // Fetching movies
+  fetchMoviesHandler = async () => {
+    const { url, query } = this.state;
+    if (url) {
+      this.setState({
         loading: true,
         movies: []
-    })
-  }
-  axios.get(this.state.url +'&query=' + this.state.query)
-        .then(response => {
-          const updatedMovies = [...this.state.movies];
-          updatedMovies.concat(response.data.results);
-          this.setState({
-            movies: this.state.movies.concat(response.data.results),
-            loading: false
-          })
-        }).catch(error => {
-          console.log(error.response)
-          this.setState({
-            loading: true,
-          })
-        }).finally( 
-          this.setState({
-            loading: false
-          }));
-  }
+      });
+      if (!query) {
+        this.setState({
+          loading: false,
+          movies: []
+        });
+        return;
+      }
+    }
+    try {
+      const foundMovies = await fetchPage(url, "&query=", query);
+      this.setState(prevState => {
+        return {
+          ...prevState,
+          movies: [...prevState.movies, ...foundMovies],
+          loading: false
+        };
+      });
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
 
   // Forming a search query
-  buildQueryHandler = ( event ) => {
+  buildSearchQueryHandler = event => {
     event.preventDefault();
     const query = event.target.value;
-    this.setState({
-      query: query
-    })
-    this.fetchMoviesHandler();
-  }
+    this.setState(
+      {
+        query: query
+      },
+      () => {
+        this.fetchMoviesHandler();
+      }
+    );
+  };
 
   // ... for MOVIES
   searchMovieHandler = () => {
     this.setState({
-      url: 'https://api.themoviedb.org/3/search/movie?api_key=58964eae3ce65098adc94e1a7187c0e6&language=en-US&sort_by=popularity.desc&include_adult=false&page=1'
-    })
-  }
+      url: APIsSearchMovies.urlMovies
+    });
+  };
 
   // ... for SERIES
   searchSeriesHandler = () => {
     this.setState({
-      url: 'https://api.themoviedb.org/3/search/tv?api_key=58964eae3ce65098adc94e1a7187c0e6&language=en-US&sort_by=popularity.desc&include_adult=false&page=1'
-    })
-  }
+      url: APIsSearchMovies.urlSeries
+    });
+  };
 
   // finding details about the movie
-  showDetailHandler = ( id ) => {
-    this.props.history.push('/movieDetails/' + id, this.state.movies)
-  }
+  showDetailHandler = id => {
+    this.props.history.push("/movieDetails/" + id, this.state.movies);
+  };
 
   render() {
-    let content = <Spinner />;
-
-    if(!this.state.loading) {
-      content = (
-        <>
-          {this.state.movies.filter(movie => {
-            return (movie.poster_path !== null) && (movie.profile_path !== null) && (movie.backdrop_path !== null)
-          }).map(movie => (
-                  <Movie 
-                        key={movie.id}
-                        nextPage={this.nextPageHandler}
-                        clicked={() => this.showDetailHandler(movie.id)}
-                        { ...movie } />
-          ))}
-        </>
-      )
-    }
+    const { loading, movies, query } = this.state;
+    const foundMovies = movies.filter(findValidMovies);
+    const content = loading ? <Spinner /> : foundMovies.map(getMovieComponents, this);
 
     return (
-      <div className={classes.SearchMovies} >
-        <Searchbar changed={(event) => this.buildQueryHandler(event)} value={this.state.query} />
+      <div className={classes.SearchMovies}>
+        <Searchbar changed={event => this.buildSearchQueryHandler(event)} value={query} />
         <div className={classes.Buttons}>
-            <Button clicked={this.searchMovieHandler}>Looking for movies?</Button>
-            <Button clicked={this.searchSeriesHandler}>Or maybe series?</Button>
+          <Button clicked={this.searchMovieHandler}>Looking for movies?</Button>
+          <Button clicked={this.searchSeriesHandler}>Or maybe series?</Button>
         </div>
-        <div className={classes.Movies}>
-          { content }
-        </div>
+        <div className={classes.Movies}>{content}</div>
       </div>
-    )
+    );
   }
 }
 

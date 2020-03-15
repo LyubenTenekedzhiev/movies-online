@@ -29,11 +29,11 @@
 @media (max-width: 1175px) {
   .Movie {
     height: 35vh;
-    width: 13vw;
+    width: 13.3vw;
   }
   .MovieTitle {
     font-size: .6rem;
-    width: 13vw;
+    width: 13.3vw;
   }
 }
 @media (max-width: 1001px) {
@@ -48,31 +48,31 @@
 }
 @media (max-width: 625px) {
   .Movie {
-    width: 20vw;
+    width: 22.5vw;
   }
   .MovieTitle {
     font-size: .6rem;
-    width: 20vw;
+    width: 22.5vw;
   }
 }
 
 @media (max-width: 450px) {
   .Movie {
-    width: 25vw;
+    width: 29vw;
   }
   .MovieTitle {
-    width: 25vw;
+    width: 29vw;
   }
 }
 
 @media (max-width: 350px) {
   .Movie {
-    height: 25vh;
-    width: 30vw;
+    height: 22vh;
+    width: 29vw;
     margin-bottom: 3.3rem;
   }
   .MovieTitle {
-    width: 30vw;
+    width: 29vw;
     font-size: .5rem;
   }
 }
@@ -80,8 +80,10 @@
 @keyframes slideIn {
   0% {
     transform: translateX(10%);
+    opacity: .7;
   }
   100% {
     transform: translateX(-1%);
+    opacity: 1;
   }
 }

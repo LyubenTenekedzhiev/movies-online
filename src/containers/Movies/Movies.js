@@ -1,35 +1,27 @@
-import React from 'react';
-import { connect } from 'react-redux';
+import React from "react";
 
-import classes from './Movies.module.css';
-import MovieSection from './MovieSection/MovieSection';
+import classes from "./Movies.module.css";
+import { APIsMovieSection } from "urlAPIs/urlAPIs";
+import MovieSection from "containers/Movies/MovieSection/MovieSection";
 
 class Movies extends React.Component {
-
   render() {
-
     return (
       <div>
-          <h1 className={classes.Title}>Popular movies</h1>
-              <MovieSection api={this.props.urls.popularMovies} />
+        <h1 className={classes.Title}>Popular movies</h1>
+        <MovieSection api={APIsMovieSection.popularMovies} />
 
-          <h1 className={classes.Title}>Popular series</h1>
-            <MovieSection api={this.props.urls.popularSeries} />
+        <h1 className={classes.Title}>Popular series</h1>
+        <MovieSection api={APIsMovieSection.popularSeries} />
 
-          <h1 className={classes.Title}>Family movies</h1>
-            <MovieSection api={this.props.urls.familyMovies} />
+        <h1 className={classes.Title}>Family movies</h1>
+        <MovieSection api={APIsMovieSection.familyMovies} />
 
-          <h1 className={classes.Title}>Documentaries</h1>
-            <MovieSection api={this.props.urls.documentaries} />
+        <h1 className={classes.Title}>Documentaries</h1>
+        <MovieSection api={APIsMovieSection.documentaries} />
       </div>
-    )
+    );
   }
 }
 
-const mapStateToProps = state => {
-  return {
-    urls: state.movieReducer.urls
-  }
-}
-
-export default connect(mapStateToProps)(Movies);
+export default Movies;

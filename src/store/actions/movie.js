@@ -2,10 +2,11 @@ import * as actionTypes from './actionTypes';
 import axios from 'axios';
 
 
-export const fetchMoviesSuccess = ( fetchedMovies, currentPage ) => {
+export const fetchMoviesSuccess = ( fetchedMovies, currentPage, category ) => {
   return {
     type: actionTypes.FETCH_MOVIES_SUCCESS,
     movies: fetchedMovies,
+    category,
     fetchedPageCount: currentPage,
   }
 }
@@ -23,12 +24,12 @@ export const fetchMoviesFail = ( error ) => {
   }
 }
 
-export const fetchMovies = (url) => {
+export const fetchMovies = (url, category) => {
   return dispatch => {
     dispatch(fetchMoviesStart());
     axios.get(url)
           .then(response => {
-            dispatch(fetchMoviesSuccess(response.data.results, response.data.page))  
+            dispatch(fetchMoviesSuccess(response.data.results, response.data.page, category))  
             // console.log(response.data.results)
           }).catch(error => {
             dispatch(fetchMoviesFail(error));

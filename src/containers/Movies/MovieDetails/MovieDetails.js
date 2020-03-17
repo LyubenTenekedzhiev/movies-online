@@ -51,7 +51,6 @@ class MovieDetail extends React.Component {
     const { show } = this.state;
     if (prevState.show !== show) {
       if (show) {
-        // console.log("unloaded", this.player);
         this.player.unload();
       } else {
         this.loadingHLSVideo();

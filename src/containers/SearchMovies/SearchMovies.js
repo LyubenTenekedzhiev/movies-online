@@ -5,11 +5,11 @@ import PropTypes from "prop-types";
 import Button from "../../components/UI/Button/Button";
 import Spinner from "../../components/UI/Spinner/Spinner";
 import Searchbar from "../../components/UI/Searchbar/Searchbar";
+import Movie from "../../components/Movie/Movie";
 
 import classes from "./SearchMovies.module.css";
 import { APIsSearchMovies } from "../../urlAPIs/urlAPIs";
 import { findValidMovies } from "../../functions/filterFuntion";
-import { getMovieComponents } from "../../functions/getMovieComponents";
 import { fetchPage } from "../../functions/moviesAPI";
 
 class SearchMovies extends React.Component {
@@ -31,7 +31,7 @@ class SearchMovies extends React.Component {
         loading: true,
         movies: []
       });
-      if (!query) {
+      if (!query.trim()) {
         this.setState({
           loading: false,
           movies: []
@@ -92,7 +92,14 @@ class SearchMovies extends React.Component {
   render() {
     const { loading, movies, query } = this.state;
     const foundMovies = movies.filter(findValidMovies);
-    const content = loading ? <Spinner /> : foundMovies.map(getMovieComponents, this);
+    const content = loading ? (
+      <Spinner />
+    ) : (
+      foundMovies.map((movie) => {
+        const randomKeyNumber = Math.random();
+        return <Movie key={`${movie.title}-${movie.id}-${randomKeyNumber}`} clicked={() => this.showDetailHandler(movie.id)} {...movie} />;
+      })
+    );
 
     return (
       <div className={classes.SearchMovies}>

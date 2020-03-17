@@ -45,8 +45,23 @@ class MovieDetail extends React.Component {
         });
       }
     }
+  }
 
-    // Install built-in polyfills to patch browser incompatibilities.
+  shouldComponentUpdate(prevState) {
+    const { show } = this.state;
+    if (prevState.show !== show) {
+      if (show) {
+        // console.log("unloaded", this.player);
+        this.player.unload();
+      } else {
+        this.loadingHLSVideo();
+      }
+      return true;
+    }
+    return false;
+  }
+
+  loadingHLSVideo = () => {
     shaka.polyfill.installAll();
     if (shaka.Player.isBrowserSupported()) {
       this.initPlayer();
@@ -70,7 +85,7 @@ class MovieDetail extends React.Component {
         })
         .catch(this.onError);
     }
-  }
+  };
 
   onErrorEvent = (event) => {
     this.onError(event.detail);

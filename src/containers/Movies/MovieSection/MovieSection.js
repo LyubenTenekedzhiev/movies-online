@@ -2,11 +2,11 @@ import React from "react";
 import { withRouter } from "react-router-dom";
 import { PropTypes } from "prop-types";
 
-import { getMovieComponents } from "../../../functions/getMovieComponents";
 import { fetchPage } from "../../../functions/moviesAPI";
 
 import Button from "../../../components/UI/Button/Button";
 import Spinner from "../../../components/UI/Spinner/Spinner";
+import Movie from "../../../components/Movie/Movie";
 import classes from "./MovieSection.module.css";
 
 class MovieSection extends React.Component {
@@ -101,13 +101,20 @@ class MovieSection extends React.Component {
   showDetailHandler = (id) => {
     const { history } = this.props;
     const { movies } = this.state;
-    history.push("/movieDetails/" + id, movies);
+    history.push({ pathname:"/movieDetails/" + id, state: movies});
   };
 
   render() {
     const { loading, firstMovie, itemsPerPage, movies } = this.state;
     const visibleMovies = movies.slice(firstMovie, firstMovie + itemsPerPage);
-    const content = loading ? <Spinner /> : visibleMovies.map(getMovieComponents, this);
+    const content = loading ? (
+      <Spinner />
+    ) : (
+      visibleMovies.map((movie) => {
+        const randomKeyNumber = Math.random();
+        return <Movie key={`${movie.title}-${movie.id}-${randomKeyNumber}`} clicked={() => this.showDetailHandler(movie.id)} {...movie} />;
+      })
+    );
 
     return (
       <div className={classes.MovieSection}>

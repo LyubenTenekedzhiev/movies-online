@@ -1,21 +1,25 @@
 import React from "react";
 import { withRouter } from "react-router-dom";
+import { PropTypes } from "prop-types";
 
-import { fetchPage } from "functions/moviesAPI";
-import { getMovieComponents } from "functions/getMovieComponents";
+import { getMovieComponents } from "../../../functions/getMovieComponents";
+import { fetchPage } from "../../../functions/moviesAPI";
 
+import Button from "../../../components/UI/Button/Button";
+import Spinner from "../../../components/UI/Spinner/Spinner";
 import classes from "./MovieSection.module.css";
-import Button from "components/UI/Button/Button";
-import Spinner from "components/UI/Spinner/Spinner";
 
 class MovieSection extends React.Component {
-  state = {
-    movies: [],
-    firstMovie: 0,
-    pageNumber: 1,
-    loading: false,
-    itemsPerPage: 8
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      movies: [],
+      firstMovie: 0,
+      pageNumber: 1,
+      loading: false,
+      itemsPerPage: 8
+    };
+  }
 
   componentDidMount() {
     this.fetchNextSetOfMovies();
@@ -26,6 +30,7 @@ class MovieSection extends React.Component {
   componentWillUnmount() {
     window.removeEventListener("resize", this.updateWindowDimensions);
   }
+
   // Adjusting the pagination according to the screen width
   updateWindowDimensions = () => {
     const { itemsPerPage } = this.state;
@@ -44,14 +49,16 @@ class MovieSection extends React.Component {
   };
 
   fetchNextSetOfMovies = async () => {
-    if (this.props.api) {
+    const { api } = this.props;
+    const { pageNumber } = this.state;
+    if (api) {
       this.setState({
         loading: true
       });
     }
     try {
-      const nextPage = await fetchPage(this.props.api, "&page=", this.state.pageNumber);
-      this.setState(prevState => {
+      const nextPage = await fetchPage(api, "&page=", pageNumber);
+      this.setState((prevState) => {
         return {
           ...prevState,
           movies: [...prevState.movies, ...nextPage],
@@ -67,13 +74,13 @@ class MovieSection extends React.Component {
   nextPageClickHandler = () => {
     const { itemsPerPage, firstMovie, movies } = this.state;
     this.setState(
-      prevState => ({
+      (prevState) => ({
         firstMovie: Math.min(prevState.firstMovie + itemsPerPage, prevState.movies.length - itemsPerPage)
       }),
       () => {
         if (firstMovie + itemsPerPage >= movies.length - itemsPerPage) {
           this.setState(
-            prevState => ({ pageNumber: prevState.pageNumber + 1 }),
+            (prevState) => ({ pageNumber: prevState.pageNumber + 1 }),
             () => {
               this.fetchNextSetOfMovies();
             }
@@ -82,16 +89,19 @@ class MovieSection extends React.Component {
       }
     );
   };
+
   prevPageClickHandler = () => {
     const { itemsPerPage } = this.state;
-    this.setState(prevState => ({
+    this.setState((prevState) => ({
       firstMovie: Math.max(prevState.firstMovie - itemsPerPage, 0)
     }));
   };
 
   // Passing the data for the given movie
-  showDetailHandler = id => {
-    this.props.history.push("/movieDetails/" + id, this.state.movies);
+  showDetailHandler = (id) => {
+    const { history } = this.props;
+    const { movies } = this.state;
+    history.push("/movieDetails/" + id, movies);
   };
 
   render() {
@@ -110,5 +120,10 @@ class MovieSection extends React.Component {
     );
   }
 }
+
+MovieSection.propTypes = {
+  api: PropTypes.string.isRequired,
+  history: PropTypes.object.isRequired
+};
 
 export default withRouter(MovieSection);

@@ -7,11 +7,11 @@ const navigation = () => {
   return (
     <div className={classes.Navigation}>
       <div className={classes.NavigationHome}>
-        <NavLink className={classes.NavigationItem} to='/'>
+        <NavLink className={classes.NavigationItem} to="/">
           Home
         </NavLink>
       </div>
-      <NavLink className={classes.NavigationItem} to='/search'>
+      <NavLink className={classes.NavigationItem} to="/search">
         Search
       </NavLink>
     </div>
